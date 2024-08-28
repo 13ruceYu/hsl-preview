@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-Preview HSL color in vscode, for CSS, SCSS, LESS.
+Preview HSL color in VS Code, for CSS, SCSS, LESS.
 </p>
 
 ## Features
