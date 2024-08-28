@@ -1,24 +1,24 @@
 {
   "name": "hsl-preview",
-  "displayName": "hsl-preview",
-  "description": "",
+  "displayName": "HSL Color Preview",
+  "description": "Preview HSL color in vscode, for CSS, SCSS, LESS.",
+  "author": "Bruce Yu <bruceyuhongbo@gmail.com>",
   "version": "0.0.1",
+  "homepage": "https://github.com/13ruceYu/hsl-preview#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/13ruceYu/hsl-preview"
+  },
   "engines": {
     "vscode": "^1.92.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "hsl-preview.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
