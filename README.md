@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/13ruceYu/hsl-preview/blob/main/res/icon.png?raw=true" height="150">
+<img src="https://github.com/13ruceYu/hsl-preview/blob/master/res/icon.png?raw=true" height="150">
 </p>
 
 <p align="center">
