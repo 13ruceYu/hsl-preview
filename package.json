@@ -1,26 +1,26 @@
 {
-  "name": "hsl-preview",
   "publisher": "bruceyuhb",
+  "name": "hsl-preview",
   "displayName": "HSL Color Preview",
+  "version": "0.0.1",
   "description": "Preview HSL color in vscode, for CSS, SCSS, LESS.",
   "author": "Bruce Yu <bruceyuhongbo@gmail.com>",
-  "version": "0.0.1",
   "homepage": "https://github.com/13ruceYu/hsl-preview#readme",
-  "icon": "res/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/13ruceYu/hsl-preview"
   },
-  "engines": {
-    "vscode": "^1.92.0"
-  },
   "categories": [
     "Other"
   ],
+  "main": "./out/extension.js",
+  "icon": "res/icon.png",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
@@ -32,6 +32,7 @@
     "publish": "pnpm vsce publish --no-dependencies"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^3.7.3",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
     "@types/vscode": "^1.92.0",
