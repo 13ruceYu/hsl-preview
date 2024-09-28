@@ -8,6 +8,7 @@ Preview HSL color in VS Code, for CSS, SCSS, LESS.
 
 ## Features
 
-<img width="100%" alt="screenshot" src="https://github.com/user-attachments/assets/95db90be-d3b2-4fbe-89de-3be1bf2363bd">
+<img width="398" alt="image" src="https://github.com/user-attachments/assets/b9b53bd8-71e8-410a-bd38-25f350b06d06">
+
 
 **Enjoy!**
