@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
   let activeEditor = vscode.window.activeTextEditor
 
   function updateDecorations() {
-    if (!activeEditor || !['css', 'scss', 'less', 'postcss'].includes(activeEditor.document.languageId)) {
+    if (!activeEditor || !['css', 'scss', 'less', 'postcss', 'tailwindcss'].includes(activeEditor.document.languageId)) {
       return
     }
 
