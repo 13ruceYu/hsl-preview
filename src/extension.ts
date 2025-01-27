@@ -7,18 +7,17 @@ const SUPPORTED_LANGUAGES = ['css', 'scss', 'less', 'postcss', 'tailwindcss']
 export function activate(context: vscode.ExtensionContext) {
   let timeout: NodeJS.Timeout | undefined
   let activeEditor = vscode.window.activeTextEditor
+  // Keep track of all decoration types
+  let decorationTypes: vscode.TextEditorDecorationType[] = []
 
-  // Decoration type for highlighting HSL color values
-  const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({})
-
-  /**
-   * Updates the color decorations in the active editor
-   * Scans the document for HSL color values and applies background colors
-   */
   function updateDecorations() {
     if (!activeEditor || !SUPPORTED_LANGUAGES.includes(activeEditor.document.languageId)) {
       return
     }
+
+    // Clear all existing decorations
+    decorationTypes.forEach(d => d.dispose())
+    decorationTypes = []
 
     const document = activeEditor.document
     const decorations: vscode.DecorationOptions[] = []
@@ -46,13 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
           color: getTextColorPrecise(Number(h), Number(s), Number(l)),
         })
 
+        decorationTypes.push(decorationType) // Store the decoration type
         activeEditor.setDecorations(decorationType, [{ range }])
         decorations.push({ range })
       }
     }
-
-    // Apply hover decorations
-    activeEditor.setDecorations(smallNumberDecorationType, decorations)
   }
 
   /**
