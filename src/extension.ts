@@ -1,26 +1,34 @@
 import * as vscode from 'vscode'
 
-// this method is called when vs code is activated
+// Constants for supported language IDs
+const SUPPORTED_LANGUAGES = ['css', 'scss', 'less', 'postcss', 'tailwindcss']
+
+// This method is called when VS Code is activated
 export function activate(context: vscode.ExtensionContext) {
   let timeout: NodeJS.Timeout | undefined
-
-  // create a decorator type that we use to decorate small numbers
-  const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({})
-
   let activeEditor = vscode.window.activeTextEditor
 
+  // Decoration type for highlighting HSL color values
+  const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({})
+
+  /**
+   * Updates the color decorations in the active editor
+   * Scans the document for HSL color values and applies background colors
+   */
   function updateDecorations() {
-    if (!activeEditor || !['css', 'scss', 'less', 'postcss', 'tailwindcss'].includes(activeEditor.document.languageId)) {
+    if (!activeEditor || !SUPPORTED_LANGUAGES.includes(activeEditor.document.languageId)) {
       return
     }
 
     const document = activeEditor.document
     const decorations: vscode.DecorationOptions[] = []
 
+    // Regular expression to match HSL color values and CSS custom properties
+    const hslRegex = /(?:hsl\(|(--[\w-]+:\s*))?([\d.]+)\s+([\d.]+)%\s+([\d.]+)%/g
+
     for (let i = 0; i < document.lineCount; i++) {
       const line = document.lineAt(i)
-      const regex = /(?:hsl\(|(--[\w-]+:\s*))?([\d.]+)\s+([\d.]+)%\s+([\d.]+)%/g
-      const matches = line.text.matchAll(regex)
+      const matches = line.text.matchAll(hslRegex)
 
       for (const match of matches) {
         const [fullMatch, , h, s, l] = match
@@ -47,8 +55,14 @@ export function activate(context: vscode.ExtensionContext) {
     activeEditor.setDecorations(smallNumberDecorationType, decorations)
   }
 
-  // Helper function: Convert HSL to RGB
-  function hslToRgb(h: number, s: number, l: number) {
+  /**
+   * Converts HSL color values to RGB
+   * @param h - Hue value (0-360)
+   * @param s - Saturation value (0-100)
+   * @param l - Lightness value (0-100)
+   * @returns Array of [r, g, b] values (0-255)
+   */
+  function hslToRgb(h: number, s: number, l: number): [number, number, number] {
     h /= 360
     s /= 100
     l /= 100
@@ -82,8 +96,11 @@ export function activate(context: vscode.ExtensionContext) {
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
   }
 
-  // Helper function: Calculate relative luminance
-  function getLuminance(r: number, g: number, b: number) {
+  /**
+   * Calculates the relative luminance of an RGB color
+   * Uses the formula from WCAG 2.0
+   */
+  function getLuminance(r: number, g: number, b: number): number {
     const a = [r, g, b].map((v) => {
       v /= 255
       return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
@@ -91,12 +108,20 @@ export function activate(context: vscode.ExtensionContext) {
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722
   }
 
-  function getTextColorPrecise(h: number, s: number, l: number) {
+  /**
+   * Determines the appropriate text color (black or white) based on background color
+   * Uses HSL values to calculate contrast ratio
+   */
+  function getTextColorPrecise(h: number, s: number, l: number): string {
     const [r, g, b] = hslToRgb(h, s, l)
     const luminance = getLuminance(r, g, b)
     return luminance > 0.179 ? '#000000' : '#FFFFFF'
   }
 
+  /**
+   * Triggers the decoration update with optional throttling
+   * @param throttle - Whether to delay the update for performance
+   */
   function triggerUpdateDecorations(throttle = false) {
     if (timeout) {
       clearTimeout(timeout)
@@ -110,28 +135,27 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
+  // Initialize decorations if there's an active editor
   if (activeEditor) {
     triggerUpdateDecorations()
   }
 
-  vscode.window.onDidChangeActiveTextEditor(
-    (editor) => {
+  // Register event handlers
+  const subscriptions = [
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
       activeEditor = editor
       if (editor) {
         triggerUpdateDecorations()
       }
-    },
-    null,
-    context.subscriptions,
-  )
+    }),
 
-  vscode.workspace.onDidChangeTextDocument(
-    (event) => {
+    vscode.workspace.onDidChangeTextDocument((event) => {
       if (activeEditor && event.document === activeEditor.document) {
         triggerUpdateDecorations(true)
       }
-    },
-    null,
-    context.subscriptions,
-  )
+    }),
+  ]
+
+  // Add event handlers to extension subscriptions
+  context.subscriptions.push(...subscriptions)
 }
