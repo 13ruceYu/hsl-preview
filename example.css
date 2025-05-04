@@ -1,4 +1,5 @@
---background: 0 0% 100%;
+:root {
+  --background: 0 0% 100%;
 --foreground: 222.2 84% 4.9%;
 --destructive: 0 84.2% 60.2%;
 --muted-foreground: 215 20.2% 65.1%;
@@ -8,6 +9,7 @@
 --chart-4: 43 74% 66%;
 --chart-5: 27 87% 67%;
 --light-1: 163 100% 50%;
---light-2: 63 100% 50%;
+--light-2: 163 100% 70%;
 --dark-1: 13 100% 10%;
 --dark-2: 163 100% 7%;
+}
