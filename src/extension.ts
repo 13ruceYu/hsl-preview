@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
     const decorations: vscode.DecorationOptions[] = []
 
     // Regular expression to match HSL color values and CSS custom properties
-    const hslRegex = /(?:hsl\(|(--[\w-]+:\s*))?([\d.]+)\s+([\d.]+)%\s+([\d.]+)%/g
+    const hslRegex = /(?:hsl\(|(--[\w-]+:\s*))?([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%/g
 
     for (let i = 0; i < document.lineCount; i++) {
       const line = document.lineAt(i)
@@ -33,9 +33,10 @@ export function activate(context: vscode.ExtensionContext) {
         const [fullMatch, , h, s, l] = match
 
         // Calculate the start position of the color values
-        const valueStartIndex = match.index! + (fullMatch.length - `${h} ${s}% ${l}%`.length)
+        const isCommaSeparated = fullMatch.includes(',')
+        const valueStartIndex = match.index! + (fullMatch.length - (isCommaSeparated ? `${h}, ${s}%, ${l}%`.length : `${h} ${s}% ${l}%`.length))
         const startPos = new vscode.Position(i, valueStartIndex)
-        const endPos = new vscode.Position(i, valueStartIndex + `${h} ${s}% ${l}%`.length)
+        const endPos = new vscode.Position(i, valueStartIndex + (isCommaSeparated ? `${h}, ${s}%, ${l}%`.length : `${h} ${s}% ${l}%`.length))
         const range = new vscode.Range(startPos, endPos)
 
         const hslColor = `hsl(${h}, ${s}%, ${l}%)`
