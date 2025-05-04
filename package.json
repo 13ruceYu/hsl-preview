@@ -2,7 +2,7 @@
   "publisher": "bruceyuhb",
   "name": "hsl-preview",
   "displayName": "HSL Color Preview",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Preview HSL color in vscode, for CSS, SCSS, LESS.",
   "author": "Bruce Yu <bruceyuhongbo@gmail.com>",
   "homepage": "https://github.com/13ruceYu/hsl-preview#readme",
