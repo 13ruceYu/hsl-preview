@@ -30,7 +30,9 @@
     "test": "vscode-test",
     "package": "pnpm vsce package --no-dependencies",
     "publish": "pnpm vsce publish --no-dependencies",
-    "release": "bumpp && nr publish"
+    "release": "bumpp && nr publish",
+    "precommit": "pnpm run test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.7",
@@ -43,6 +45,7 @@
     "@vscode/vsce": "^3.1.0",
     "bumpp": "^9.6.1",
     "eslint": "^9.9.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "husky": "^8.0.0"
   }
 }
